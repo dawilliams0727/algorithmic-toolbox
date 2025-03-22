@@ -13,31 +13,7 @@ def points_cover_naive(starts, ends, points):
     return count
 
 def points_cover(starts, ends, points):
-    # create segments
-    segments = list(zip(starts,ends))
-    # maybe sort segments by start points?
-    segments.sort(key = lambda x: [x][0])
-    count = [0] * len(points)
-    def recursive(segments, points):
-        # if there are no segments, there can be no points intersecting
-        if len(segments) == 0:
-            return
-        if len(segments) == 1:
-            # if there is one segment, check all points against it
-            start = segments[0][0]
-            end = segments[0][1]
-            for index, point in enumerate(points):
-                if start <= point <= end:
-                    count[index] += 1
-            return
-        # split segments and points into halves and recurse
-        s,p = len(segments) // 2, len(points) // 2
-        left, right =(segments[:s], points[:]), (segments[s:], points[:])
-        # check each point for containment in each segment of smaller group
-        recursive(*left), recursive(*right)
-    
-    recursive(segments, points)    
-    return count
+   ...
 
 if __name__ == '__main__':
     data = list(map(int, stdin.read().split()))

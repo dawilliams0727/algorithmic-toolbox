@@ -10,13 +10,20 @@ def fibonacci_last_digit(n):
 
     return current % 10
 
-def fibonacci_last_digit_fast(n):
-    # Pisano period for modulo 10 is 60
-    # last digit of the nth Fibonacci number is the same as the last digit of the n mod 60th Fibonacci number
-    remainder = n % 60
-    fib = [0,1]
+def fibonacci_last_digit_fast(n: int) -> int:
+    """
+    Computes the last digit of the nth Fibonacci number using the Pisano period for modulo 10.
+
+    Args:
+        n (int): The index of the Fibonacci number.
+
+    Returns:
+        int: The last digit of the nth Fibonacci number.
+    """
+    remainder: int = n % 60
+    fib: list[int] = [0, 1]
     for i in range(2, remainder + 1):
-        fib.append(fib[i-1] + fib[i-2])
+        fib.append(fib[i - 1] + fib[i - 2])
     return fib[remainder] % 10
 
 if __name__ == '__main__':

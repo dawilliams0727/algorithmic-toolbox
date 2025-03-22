@@ -9,53 +9,45 @@ def inversions_naive(a):
     return number_of_inversions
 
 
-def inversions(a):
-    def recursive(a):
-        count = 0
-        # base case, if len(a) <= 1 return a
-        if len(a) == 1:
-            return a,count
-            # no inversions possible if only 0 or 1 element
-        if len(a) == 2:
-            if a[0] > a[1]:
-                a[0], a[1] = a[1], a[0]
-                count += 1
-            return a, count
-        # split array into two halves
-        mid = len(a) // 2
-        # call inversions on left and right half
-        left, right = (a[:mid]), (a[mid:])
-        # merge left and right halves and count additional inversion at boundary
-        lc, rc = recursive(left), recursive(right)
-        for i in lc[0]:
-            for j in rc[0]:
-                if i > j:
-                    count += 1
-        return merge(lc[0], rc[0]), count+lc[1]+rc[1]
-    
-    result = recursive(a)
-    return result[1]
+def inversions(a: list[int]) -> int:
+    """
+    Counts the number of inversions in the list using a modified merge sort.
 
-def merge(left, right):
-    if len(left) != len(right):
-        shorter, longer = min(left, right, key=len), max(left, right, key=len)
-    shorter, longer = left, right
-    merged = []
-    i,j = 0,0
-    while i < len(shorter) and j < len(longer):
-        if shorter[i] < longer[j]:
-            merged.append(shorter[i])
-            i += 1
-        else:
-            merged.append(longer[j])
-            j += 1
+    Args:
+        a (list[int]): The input list.
 
-    if i == len(shorter):
-        merged.extend(longer[j:])
-    elif j == len(longer):
-        merged.extend(shorter[i:])
-    
-    return merged
+    Returns:
+        int: The number of inversions in the list.
+    """
+    def merge_sort(arr: list[int]) -> tuple[list[int], int]:
+        if len(arr) <= 1:
+            return arr, 0
+
+        mid: int = len(arr) // 2
+        left, inv_left = merge_sort(arr[:mid])
+        right, inv_right = merge_sort(arr[mid:])
+        merged, inv_split = merge_and_count(left, right)
+        return merged, inv_left + inv_right + inv_split
+
+    def merge_and_count(left: list[int], right: list[int]) -> tuple[list[int], int]:
+        merged: list[int] = []
+        i = j = inv_count = 0
+
+        while i < len(left) and j < len(right):
+            if left[i] <= right[j]:
+                merged.append(left[i])
+                i += 1
+            else:
+                merged.append(right[j])
+                inv_count += len(left) - i  # All remaining elements in left are inversions
+                j += 1
+
+        merged.extend(left[i:])
+        merged.extend(right[j:])
+        return merged, inv_count
+
+    _, total_inversions = merge_sort(a)
+    return total_inversions
 
 
 if __name__ == '__main__':

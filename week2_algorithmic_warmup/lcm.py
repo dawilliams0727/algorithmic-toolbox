@@ -4,9 +4,20 @@ def lcm(a, b):
             return l
 
     assert False
-def lcm_fast(a,b):
-    gcd = gcd_fast(a,b)
-    return a*b//gcd
+
+def lcm_fast(a: int, b: int) -> int:
+    """
+    Computes the least common multiple (LCM) of two integers using their GCD.
+
+    Args:
+        a (int): First integer.
+        b (int): Second integer.
+
+    Returns:
+        int: The least common multiple of a and b.
+    """
+    gcd: int = gcd_fast(a, b)
+    return a * b // gcd
 
 def gcd_fast(a,b):
     if b == 0:
